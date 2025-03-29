@@ -1,4 +1,10 @@
 
+using Serilog;
+using GetFlight.Application;
+using GetFlight.Infrastructure;
+using System.Text.Json.Serialization;
+using GetFlight.API.Middleware;
+
 namespace GetFlight.API
 {
     public class Program
@@ -7,12 +13,38 @@ namespace GetFlight.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            // Настройка Serilog
+            builder.Host.UseSerilog((context, services, configuration) => configuration
+                .ReadFrom.Configuration(context.Configuration)
+                .ReadFrom.Services(services)
+                .Enrich.FromLogContext()
+                .WriteTo.Console()
+                .WriteTo.File("logs/getflight-.log", rollingInterval: RollingInterval.Day));
 
-            builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+        options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+    });
+
+
+            // Регистрация слоев Application и Infrastructure
+            builder.Services.AddApplication();
+            builder.Services.AddInfrastructure();
+
+            // Настройка LazyCache
+            builder.Services.AddLazyCache();
+
+            // Swagger
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new() { Title = "GetFlight API", Version = "v1" });
+            });
+
+            // TODO Настройка JWT аутентификации
+            // ...
 
             var app = builder.Build();
 
@@ -25,6 +57,10 @@ namespace GetFlight.API
 
             app.UseHttpsRedirection();
 
+            // Добавление custom middleware
+            app.UseMiddleware<RequestLoggingMiddleware>();
+
+            app.UseAuthentication();
             app.UseAuthorization();
 
 
