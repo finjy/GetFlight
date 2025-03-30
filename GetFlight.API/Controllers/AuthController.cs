@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.Data;
+﻿using GetFlight.API.Models;
+using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -7,8 +8,6 @@ using System.Text;
 
 namespace GetFlight.API.Controllers
 {
-    public class AuthController
-    {
         /// <summary>
         /// Контроллер для аутентификации пользователей
         /// </summary>
@@ -35,7 +34,7 @@ namespace GetFlight.API.Controllers
             [HttpPost("login")]
             [ProducesResponseType(StatusCodes.Status200OK)]
             [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-            public ActionResult<LoginResponse> Login([FromBody] LoginRequest request)
+            public ActionResult<LoginResponseModel> Login([FromBody] LoginRequestModel request)
             {
                 // Для тестового задания используем упрощенную проверку
                 // В реальном приложении здесь была бы проверка в базе данных
@@ -43,7 +42,7 @@ namespace GetFlight.API.Controllers
                 {
                     _logger.LogInformation("User {Username} successfully authenticated", request.Username);
                     var token = GenerateJwtToken(request.Username);
-                    return Ok(new LoginResponse { Token = token });
+                    return Ok(new LoginResponseModel { Token = token });
                 }
 
                 _logger.LogWarning("Failed login attempt for user {Username}", request.Username);
@@ -85,4 +84,3 @@ namespace GetFlight.API.Controllers
             }
         }
     }
-}

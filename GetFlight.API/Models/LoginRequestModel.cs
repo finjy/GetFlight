@@ -5,7 +5,7 @@ namespace GetFlight.API.Models
     /// <summary>
     /// Модель запроса для аутентификации
     /// </summary>
-    public class LoginRequest
+    public class LoginRequestModel
     {
         /// <summary>
         /// Имя пользователя

@@ -3,7 +3,7 @@
     /// <summary>
     /// Модель ответа с токеном аутентификации
     /// </summary>
-    public class LoginResponse
+    public class LoginResponseModel
     {
         /// <summary>
         /// JWT-токен для доступа к API
