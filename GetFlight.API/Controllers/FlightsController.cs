@@ -39,7 +39,7 @@ namespace GetFlight.API.Controllers
             }
 
             _logger.LogInformation("Searching flights from {Origin} to {Destination} on {DepartureDate}",
-                request.Origin, request.Destination, request.DepartureDate.ToString("dd-MM-yyyy"));
+                request.Origin, request.Destination, request.DepartureDate.ToString("yyyy-MM-dd"));
 
             var flights = await _flightService.SearchFlightsAsync(request, cancellationToken);
             return Ok(flights);

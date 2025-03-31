@@ -26,14 +26,14 @@ namespace GetFlight.Application
                 throw new ArgumentNullException(nameof(request));
 
             // формируем ключ кэша
-            var cacheKey = $"flights_{request.Origin}_{request.Destination}_{request.DepartureDate:dd-MM-yyyy}_{request.Passengers}";
+            var cacheKey = $"flights_{request.Origin}_{request.Destination}_{request.DepartureDate:yyyy-MM-dd}_{request.Passengers}";
 
             // с LazyCache используем GetOrAddAsync 
             var flights = await _cache.GetOrAddAsync(cacheKey, async entry =>
             {
                 entry.SlidingExpiration = TimeSpan.FromMinutes(10);
 
-                _logger.LogInformation("Cache miss. Searching flights from providers for route {Origin} to {Destination} on {DepartureDate}", request.Origin, request.Destination, request.DepartureDate.ToString("dd-MM-yyyy"));
+                _logger.LogInformation("Cache miss. Searching flights from providers for route {Origin} to {Destination} on {DepartureDate}", request.Origin, request.Destination, request.DepartureDate.ToString("yyyy-MM-dd"));
 
                 // создаем задачи для параллельного запроса к провайдерам
                 var searchTasks = _flightProviders.Select(provider =>
