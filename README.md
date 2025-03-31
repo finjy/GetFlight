@@ -116,10 +116,14 @@ docker run -p 8080:80 getflight
 - Иногда бронирование может не удаться из-за симулированной недоступности (80-90% успешных бронирований)
 
 ## Тестирование
-Проект включает модульные тесты для ключевых компонентов системы:
-```bash
-dotnet test
-```
+Юнит-тесты обеспечивают покрытие следующих аспектов:
+
+- Корректность обработки запросов API
+- Работа агрегации данных из разных источников
+- Правильное применение фильтров и сортировки
+- Логика бронирования рейсов
+- Корректная обработка данных провайдерами
+
 
 ---
 
@@ -243,10 +247,13 @@ You'll see the Swagger UI with all available endpoints.
 - Sometimes booking may fail due to simulated unavailability (80-90% success rate)
 
 ## Testing
-The project includes unit tests for key system components:
-```bash
-dotnet test
-```
+Unit tests provide coverage for the following aspects:
+
+- Correct API request handling
+- Data aggregation from different sources
+- Proper application of filters and sorting
+- Flight booking logic
+- Correct data processing by providers
 
 
 
