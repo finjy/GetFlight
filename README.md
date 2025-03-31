@@ -20,7 +20,7 @@ GetFlight - это API для агрегации данных о доступн�
 - JWT-аутентификация
 - LazyCache для кэширования
 - Serilog для логирования
-- xUnit, Moq и FluentAssertions для тестирования
+- xUnit, Moq для тестирования
 
 ## Архитектура
 Проект реализован с использованием многослойной архитектуры:
@@ -150,7 +150,7 @@ This project is a test assignment demonstrating an approach to creating an aggre
 - JWT authentication
 - LazyCache for caching
 - Serilog for logging
-- xUnit, Moq, and FluentAssertions for testing
+- xUnit, Moq for testing
 
 ## Architecture
 The project is implemented using a multi-layer architecture:
