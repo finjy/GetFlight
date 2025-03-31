@@ -3,6 +3,9 @@
 ## Обзор проекта
 GetFlight - это API для агрегации данных о доступных авиаперелетах из разных источников. Приложение предоставляет унифицированный интерфейс для поиска, фильтрации и бронирования рейсов.
 
+## Примечание
+Этот проект является тестовым заданием, демонстрирующим подход к созданию агрегирующего API для рейсов. Для реального использования потребуется дополнительная настройка и интеграция с реальными поставщиками данных.
+
 ## Основные возможности
 - Агрегация данных о перелетах из различных источников
 - Фильтрация и сортировка результатов поиска по различным параметрам
@@ -27,15 +30,10 @@ GetFlight - это API для агрегации данных о доступн�
 - GetFlight.Infrastructure - реализация внешних провайдеров и инфраструктурных сервисов
 
 ## Запуск проекта
-Приложение можно запустить локально или в Docker-контейнере.
+Приложение можно запустить локально или в Docker-контейнере (Dockerfile добавлен в проект).
 
 ### Локальный запуск
-```bash
-cd GetFlight
-dotnet restore
-dotnet build
-dotnet run --project src/GetFlight.API
-```
+Откройте решение в Visual Studio и запустите проект GetFlight.API нажатием F5.
 
 ### Запуск в Docker
 ```bash
@@ -44,7 +42,6 @@ docker run -p 8080:80 getflight
 ```
 
 ## API
-После запуска документация API доступна по адресу: http://localhost:5000/swagger
 
 ### Основные эндпоинты
 - `GET /api/flights` - поиск доступных перелетов с фильтрацией и сортировкой
@@ -54,9 +51,7 @@ docker run -p 8080:80 getflight
 ## Тестирование API с помощью Swagger
 
 ### Шаг 1: Доступ к Swagger UI
-1. Запустите приложение используя один из методов, описанных выше
-2. Откройте браузер и перейдите по адресу http://localhost:5000/swagger или https://localhost:5001/swagger
-3. Вы увидите интерфейс Swagger со всеми доступными эндпоинтами
+При запуске через Visual Studio браузер со Swagger UI откроется автоматически.
 
 ### Шаг 2: Аутентификация
 1. Разверните эндпоинт `/api/Auth/login`
@@ -126,13 +121,16 @@ docker run -p 8080:80 getflight
 dotnet test
 ```
 
-## Примечания
-Этот проект является тестовым заданием, демонстрирующим подход к созданию агрегирующего API для рейсов. Для реального использования потребуется дополнительная настройка и интеграция с реальными поставщиками данных.
+---
+
 
 # GetFlight API
 
 ## Project Overview
 GetFlight is an API for aggregating available flight data from different sources. The application provides a unified interface for searching, filtering, and booking flights.
+
+## Note
+This project is a test assignment demonstrating an approach to creating an aggregating API for flights. For real use, additional configuration and integration with actual data providers would be required.
 
 ## Key Features
 - Flight data aggregation from various sources
@@ -158,15 +156,10 @@ The project is implemented using a multi-layer architecture:
 - GetFlight.Infrastructure - implementation of external providers and infrastructure services
 
 ## Running the Project
-The application can be run locally or in a Docker container.
+The application can be run locally or in a Docker container (Dockerfile is included in the project).
 
 ### Local Launch
-```bash
-cd GetFlight
-dotnet restore
-dotnet build
-dotnet run --project src/GetFlight.API
-```
+Open the solution in Visual Studio and run the GetFlight.API project by pressing F5.
 
 ### Docker Launch
 ```bash
@@ -175,7 +168,6 @@ docker run -p 8080:80 getflight
 ```
 
 ## API
-After launch, the API documentation is available at: http://localhost:5000/swagger
 
 ### Main Endpoints
 - `GET /api/flights` - search for available flights with filtering and sorting
@@ -185,9 +177,8 @@ After launch, the API documentation is available at: http://localhost:5000/swagg
 ## Testing the API with Swagger
 
 ### Step 1: Accessing Swagger UI
-1. Launch the application using one of the methods described above
-2. Open your browser and navigate to http://localhost:5000/swagger or https://localhost:5001/swagger
-3. You'll see the Swagger UI with all available endpoints
+When running through Visual Studio, a browser with the Swagger UI will open automatically.
+You'll see the Swagger UI with all available endpoints.
 
 ### Step 2: Authentication
 1. Expand the `/api/Auth/login` endpoint
@@ -257,8 +248,6 @@ The project includes unit tests for key system components:
 dotnet test
 ```
 
-## Notes
-This project is a test assignment demonstrating an approach to creating an aggregating API for flights. For real use, additional configuration and integration with actual data providers would be required.
 
----
+
 
