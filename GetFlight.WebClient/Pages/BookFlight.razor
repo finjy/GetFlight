@@ -1,0 +1,141 @@
+﻿@page "/book/{FlightId}/{Provider}"
+@inject FlightService FlightService
+@inject AuthService AuthService
+@inject NavigationManager NavigationManager
+
+<PageTitle>GetFlight - Бронирование рейса</PageTitle>
+
+<h1>Бронирование рейса</h1>
+
+@if (!AuthService.IsAuthenticated)
+{
+    <div class="alert alert-warning" role="alert">
+        Для бронирования необходимо <a href="/login" class="alert-link">войти в систему</a>.
+    </div>
+}
+else
+{
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Информация о пассажире</h5>
+                </div>
+                <div class="card-body">
+                    <EditForm Model="@bookingRequest" OnValidSubmit="SubmitBooking">
+                        <DataAnnotationsValidator />
+
+                        <div class="mb-3">
+                            <label for="firstName" class="form-label">Имя</label>
+                            <input id="firstName" class="form-control" @bind="passenger.FirstName" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="lastName" class="form-label">Фамилия</label>
+                            <input id="lastName" class="form-control" @bind="passenger.LastName" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="dateOfBirth" class="form-label">Дата рождения</label>
+                            <InputDate id="dateOfBirth" class="form-control" @bind-Value="passenger.DateOfBirth" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="passportNumber" class="form-label">Номер паспорта</label>
+                            <input id="passportNumber" class="form-control" @bind="passenger.PassportNumber" />
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" disabled="@isBooking">
+                            @if (isBooking)
+                            {
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                <span class="ms-1">Бронирование...</span>
+                            }
+                            else
+                            {
+                                <span>Забронировать</span>
+                            }
+                        </button>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            @if (bookingResult != null)
+            {
+                <div class="card @(bookingResult.Success ? "border-success" : "border-danger")">
+                    <div class="card-header @(bookingResult.Success ? "bg-success text-white" : "bg-danger text-white")">
+                        <h5 class="mb-0">@(bookingResult.Success ? "Бронирование успешно!" : "Ошибка бронирования")</h5>
+                    </div>
+                    <div class="card-body">
+                        @if (bookingResult.Success)
+                        {
+                            <h5 class="card-title">Номер бронирования: @bookingResult.BookingReference</h5>
+                            <p class="card-text">@bookingResult.Message</p>
+                            <button class="btn btn-primary" @onclick="GoToSearch">Вернуться к поиску</button>
+                        }
+                        else
+                        {
+                            <p class="card-text">@bookingResult.Message</p>
+                            <button class="btn btn-primary" @onclick="TryAgain">Попробовать снова</button>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string FlightId { get; set; }
+
+    [Parameter]
+    public string Provider { get; set; }
+
+    private BookingRequestDto bookingRequest;
+    private PassengerDto passenger = new PassengerDto();
+    private BookingResultDto bookingResult;
+    private bool isBooking = false;
+
+    protected override void OnInitialized()
+    {
+        bookingRequest = new BookingRequestDto
+            {
+                FlightId = Guid.Parse(FlightId),
+                Provider = Provider,
+                Passengers = new PassengerDto[] { passenger }
+            };
+    }
+
+    private async Task SubmitBooking()
+    {
+        if (!AuthService.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("/login");
+            return;
+        }
+
+        isBooking = true;
+
+        try
+        {
+            bookingResult = await FlightService.BookFlight(bookingRequest);
+        }
+        finally
+        {
+            isBooking = false;
+        }
+    }
+
+    private void GoToSearch()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+
+    private void TryAgain()
+    {
+        bookingResult = null;
+    }
+}

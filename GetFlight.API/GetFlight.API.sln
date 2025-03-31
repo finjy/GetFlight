@@ -21,6 +21,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{02EA681E-C7D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{6350E9B9-AFD1-4070-8F4E-D18AD8EEA65E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GetFlight.WebClient", "..\GetFlight.WebClient\GetFlight.WebClient.csproj", "{36CE501D-DBFE-47F9-9A3F-61395AFD562D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,10 @@ Global
 		{0F6521AA-9F7F-4695-B4AA-1CCC1AF2577E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F6521AA-9F7F-4695-B4AA-1CCC1AF2577E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F6521AA-9F7F-4695-B4AA-1CCC1AF2577E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36CE501D-DBFE-47F9-9A3F-61395AFD562D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36CE501D-DBFE-47F9-9A3F-61395AFD562D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36CE501D-DBFE-47F9-9A3F-61395AFD562D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36CE501D-DBFE-47F9-9A3F-61395AFD562D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

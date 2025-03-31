@@ -106,6 +106,16 @@ namespace GetFlight.API
                     };
                 });
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("BlazorPolicy", builder =>
+                {
+                    builder.WithOrigins("http://localhost:11649") // URL Blazor-приложения
+                           .AllowAnyMethod()
+                           .AllowAnyHeader();
+                });
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -119,6 +129,8 @@ namespace GetFlight.API
 
             // Добавление custom middleware
             app.UseMiddleware<RequestLoggingMiddleware>();
+
+            app.UseCors("BlazorPolicy");
 
             app.UseAuthentication();
             app.UseAuthorization();

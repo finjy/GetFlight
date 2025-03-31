@@ -1,0 +1,128 @@
+﻿@page "/"
+@inject FlightService FlightService
+@inject NavigationManager NavigationManager
+
+<PageTitle>GetFlight - Поиск рейсов</PageTitle>
+
+<h1>Поиск авиабилетов</h1>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                Параметры поиска
+            </div>
+            <div class="card-body">
+                <EditForm Model="@searchRequest" OnValidSubmit="SearchFlights">
+                    <DataAnnotationsValidator />
+                    
+                    <div class="mb-3">
+                        <label for="origin" class="form-label">Откуда</label>
+                        <input id="origin" class="form-control" @bind="searchRequest.Origin" placeholder="Например, MOW" />
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="destination" class="form-label">Куда</label>
+                        <input id="destination" class="form-control" @bind="searchRequest.Destination" placeholder="Например, LED" />
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="departureDate" class="form-label">Дата вылета</label>
+                        <InputDate id="departureDate" class="form-control" @bind-Value="searchRequest.DepartureDate" />
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="passengers" class="form-label">Количество пассажиров</label>
+                        <InputNumber id="passengers" class="form-control" @bind-Value="searchRequest.Passengers" />
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="maxPrice" class="form-label">Максимальная цена</label>
+                        <InputNumber id="maxPrice" class="form-control" @bind-Value="searchRequest.MaxPrice" />
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="airline" class="form-label">Авиакомпания</label>
+                        <input id="airline" class="form-control" @bind="searchRequest.Airline" placeholder="Например, First Airlines" />
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Найти рейсы</button>
+                </EditForm>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        @if (isSearching)
+        {
+            <div class="d-flex justify-content-center">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Загрузка...</span>
+                </div>
+            </div>
+        }
+        else if (flights != null && flights.Any())
+        {
+            <h3>Найдено рейсов: @flights.Count()</h3>
+            
+            @foreach (var flight in flights)
+            {
+                <div class="card mb-3">
+                    <div class="card-header d-flex justify-content-between">
+                        <span>@flight.FlightNumber</span>
+                        <span>@flight.Airline</span>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">@flight.OriginName (@flight.Origin) → @flight.DestinationName (@flight.Destination)</h5>
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <p class="card-text">Вылет: @flight.DepartureTime.ToString("dd.MM.yyyy HH:mm")</p>
+                                <p class="card-text">Прибытие: @flight.ArrivalTime.ToString("dd.MM.yyyy HH:mm")</p>
+                                <p class="card-text">Длительность: @flight.Duration.Hours ч @flight.Duration.Minutes мин</p>
+                            </div>
+                            <div class="text-end">
+                                <h3 class="text-primary">@flight.Price.ToString("C")</h3>
+                                <p class="card-text">Свободных мест: @flight.AvailableSeats</p>
+                                <button class="btn btn-success" @onclick="() => BookFlight(flight)">Забронировать</button>
+                            </div>
+                        </div>
+                        <p class="card-text mt-2"><small class="text-muted">Провайдер: @flight.Provider</small></p>
+                    </div>
+                </div>
+            }
+        }
+        else if (wasSearched)
+        {
+            <div class="alert alert-info" role="alert">
+                Рейсы не найдены. Попробуйте изменить параметры поиска.
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    private SearchFlightRequest searchRequest = new SearchFlightRequest();
+    private IEnumerable<FlightDto> flights;
+    private bool isSearching = false;
+    private bool wasSearched = false;
+
+    private async Task SearchFlights()
+    {
+        isSearching = true;
+        wasSearched = true;
+        
+        try
+        {
+            flights = await FlightService.SearchFlights(searchRequest);
+        }
+        finally
+        {
+            isSearching = false;
+        }
+    }
+
+    private void BookFlight(FlightDto flight)
+    {
+        NavigationManager.NavigateTo($"/book/{flight.Id}/{flight.Provider}");
+    }
+}
